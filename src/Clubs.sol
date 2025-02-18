@@ -10,7 +10,6 @@ contract Club is ERC20 {
     constructor(
         string memory name,
         string memory symbol,
-       
         uint256 amount
     ) ERC20(name, symbol) {
         _mint(msg.sender, amount);
@@ -18,10 +17,10 @@ contract Club is ERC20 {
 }
 
 contract ClubsFactory is Ownable {
-    uint256 constant maxClubTokens = 10 ** 27;
+    uint256 constant maxClubTokens = 10 ** 24;
     mapping(string => address) public clubs;
     mapping(string => uint256) public prices;
-  
+
     SportekaToken sportekaToken;
 
     constructor(
@@ -35,16 +34,11 @@ contract ClubsFactory is Ownable {
         string memory name,
         string memory symbol,
         uint256 stadiumsize,
-        uint256 seatPrice 
-      
+        uint256 seatPrice
     ) public onlyOwner {
-        
         require(clubs[name] == address(0), "Club exists");
-        clubs[name] = address(new Club(name, symbol,maxClubTokens));
-        prices[name] = uint256(stadiumsize*seatPrice);
-        
-        
-        
+        clubs[name] = address(new Club(name, symbol, maxClubTokens));
+        prices[name] = uint256(stadiumsize * seatPrice);
     }
 
     function buyClubToken(
