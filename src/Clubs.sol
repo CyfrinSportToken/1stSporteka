@@ -2,8 +2,8 @@
 
 pragma solidity ^0.8.19;
 
-import "node_modules/@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "node_modules/@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "./SportekaToken.sol";
 
 contract Club is ERC20 {
@@ -20,6 +20,7 @@ contract ClubsFactory is Ownable {
     uint256 constant maxClubTokens = 10 ** 24;
     mapping(string => address) public clubs;
     mapping(string => uint256) public prices;
+    
 
     SportekaToken sportekaToken;
 
@@ -38,12 +39,13 @@ contract ClubsFactory is Ownable {
     ) public onlyOwner {
         require(clubs[name] == address(0), "Club exists");
         clubs[name] = address(new Club(name, symbol, maxClubTokens));
-        prices[name] = uint256(stadiumsize * seatPrice);
+        prices[name] = uint256(stadiumsize * seatPrice/1000000);
     }
 
     function buyClubToken(
         string memory clubName,
         uint256 amountOfToken
+        
     ) public {
         require(clubs[clubName] != address(0), "Club not exist");
         uint256 price = prices[clubName];
